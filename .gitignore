@@ -1,0 +1,13 @@
+# IntelliJ
+.idea/
+*.iml
+
+# Node / Angular
+node_modules/
+dist/
+
+# Maven / Java
+target/
+
+# Misc
+.DS_Store
