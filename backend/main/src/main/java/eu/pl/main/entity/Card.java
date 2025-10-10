@@ -3,37 +3,40 @@ package eu.pl.main.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
+@Entity
+@Table(name = "card")
 @Getter
 @Setter
-@Entity
-@Table(name = "card", schema = "public")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Card {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "collection_id", nullable = false)
-    private Collection collection;
-
-    @Column(name = "front", nullable = false, columnDefinition = "TEXT")
+    @Column(nullable = false)
     private String front;
 
-    @Column(name = "back", nullable = false, columnDefinition = "TEXT")
+    @Column(nullable = false)
     private String back;
 
-    @Column(name = "known", nullable = false)
-    private boolean known = false;
+    @Column(nullable = false)
+    private boolean known;
 
-    @Column(name = "updated_at", nullable = false)
-    private OffsetDateTime updatedAt;
+    @Column(name = "collection_id", nullable = false)
+    private UUID collectionId;
 
     @Column(name = "created_at", nullable = false)
     private OffsetDateTime createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    private OffsetDateTime updatedAt;
 }
