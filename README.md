@@ -12,17 +12,17 @@ This project aims to solve a common problem for language learners: the time-cons
 - **Language Autodetection**: Intelligently detects the source language of your material.
 - **Customizable Decks**: Choose the base and target languages (supports Polish, English, Spanish, and German for the MVP).
 - **Simple Learning Interface**: Study your flashcards with a straightforward "I know / I don't know" system.
-- **Secure and Personal**: User accounts are managed through Keycloak, ensuring that your collections are private.
+- **Secure and Personal**: User accounts are managed through Supabase & Spring Security, ensuring that your collections are private.
 
 ## Tech Stack
 
-| Category          | Technology                               |
-| ----------------- | ---------------------------------------- |
-| **Backend**       | Java (Spring Boot)                       |
+| Category          | Technology                                 |
+| ----------------- |--------------------------------------------|
+| **Backend**       | Java (Spring Boot)                         |
 | **Frontend**      | Angular (`^17.3.0`), TypeScript (`~5.4.2`) |
-| **Database**      | PostgreSQL                               |
-| **Authentication**| Keycloak                                 |
-| **Containerization**| Docker, Docker Compose                   |
+| **Database**      | PostgreSQL                                 |
+| **Authentication**| Supabase                                    |
+| **Containerization**| Docker, Docker Compose                     |
 
 ## Getting Started Locally
 
@@ -43,14 +43,7 @@ Follow these instructions to set up and run the project on your local machine.
     cd language-booster
     ```
 
-2.  **Launch Backend Services:**
-    The project uses Docker Compose to run dependencies like PostgreSQL and Keycloak.
-    ```sh
-    docker-compose up -d
-    ```
-    *Note: You may need to configure environment variables for the backend to connect to these services. Check for an `application.properties.example` or similar configuration file.*
-
-3.  **Run the Backend:**
+2. **Run the Backend:**
     Navigate to the backend directory and use the Maven wrapper to start the Spring Boot application.
     ```sh
     cd backend/main
@@ -58,7 +51,7 @@ Follow these instructions to set up and run the project on your local machine.
     ```
     The backend server should now be running.
 
-4.  **Run the Frontend:**
+3. **Run the Frontend:**
     In a new terminal, navigate to the frontend directory, install dependencies, and start the Angular development server.
     ```sh
     cd frontend

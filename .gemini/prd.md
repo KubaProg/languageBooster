@@ -46,7 +46,7 @@ FR-06 Obsługa błędów generacji
 • Brak automatycznych limitów prób poza pojedynczym ponowieniem z poziomu UI.
 
 FR-07 Uwierzytelnianie i dostęp  
-• Logowanie i rejestracja przez email+hasło (Keycloak).  
+• Logowanie i rejestracja przez email+hasło (Supabase).  
 • Każdy użytkownik widzi wyłącznie swoje kolekcje i postęp.
 
 FR-08 Ograniczenia operacyjne  
@@ -61,7 +61,7 @@ FR-09 Nawigacja i UI
 • Ekran ładowania z prostą animacją podczas generacji.
 
 FR-10 Bezpieczeństwo i prywatność (minimalne MVP)  
-• Dane kont i sesji zarządzane przez Keycloak.  
+• Dane kont i sesji zarządzane przez Supabase.  
 • Brak polityki retencji/eksportu danych w MVP (do doprecyzowania po MVP).
 
 Wymagania niefunkcjonalne (NFR – minimalny zakres MVP)  
@@ -88,14 +88,14 @@ Poza zakresem MVP (eksplicytnie):
 US-001 Rejestracja konta  
 Opis: Jako nowy użytkownik chcę utworzyć konto przy użyciu emaila i hasła, aby móc tworzyć i przechowywać moje kolekcje.  
 Kryteria akceptacji:  
-• Formularz rejestracji przyjmuje email oraz hasło i tworzy konto w Keycloak.  
+• Formularz rejestracji przyjmuje email oraz hasło i tworzy konto w Supabase.  
 • Po rejestracji użytkownik jest przekierowany do logowania.  
 • Walidacja podstawowa pól (format email, minimalna długość hasła).
 
 US-002 Logowanie i wylogowanie  
 Opis: Jako użytkownik chcę zalogować się i wylogować, aby bezpiecznie uzyskiwać dostęp do moich kolekcji.  
 Kryteria akceptacji:  
-• Logowanie przez Keycloak (email+hasło).  
+• Logowanie przez Supabase (email+hasło).  
 • Po zalogowaniu widoczna jest lista kolekcji użytkownika.  
 • Wylogowanie kończy sesję i ukrywa dane użytkownika.
 
@@ -219,7 +219,7 @@ Kryteria akceptacji:
 US-021 Bezpieczny dostęp – uwierzytelnianie  
 Opis: Jako użytkownik chcę bezpiecznie logować się do aplikacji.  
 Kryteria akceptacji:  
-• Uwierzytelnianie przez Keycloak z prawidłowym przepływem sesji.  
+• Uwierzytelnianie przez Supabase z prawidłowym przepływem sesji.  
 • Dostęp do widoków aplikacji jest niedostępny bez zalogowania.
 
 US-022 Błędy formularza i walidacje UI (minimalne)  
