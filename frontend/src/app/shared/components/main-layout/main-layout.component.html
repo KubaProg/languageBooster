@@ -1,0 +1,16 @@
+<nav class="bg-gray-800 text-white p-4">
+  <div class="container mx-auto flex justify-between items-center">
+    <a routerLink="/app/dashboard" class="text-xl font-bold">LanguageBooster</a>
+    <div>
+      <a routerLink="/app/collections" class="px-4">My Collections</a>
+      <a routerLink="/app/collections/new" class="px-4">Create New</a>
+    </div>
+    <div>
+      <button (click)="logout()" class="px-4">Logout</button>
+    </div>
+  </div>
+</nav>
+
+<main class="container mx-auto p-4">
+  <router-outlet></router-outlet>
+</main>

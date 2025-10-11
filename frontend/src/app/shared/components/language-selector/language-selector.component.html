@@ -1,0 +1,18 @@
+<div [formGroup]="languageForm" class="flex space-x-4">
+  <div class="flex-1">
+    <label for="baseLang" class="block text-sm font-medium text-gray-700">Base Language</label>
+    <select id="baseLang" formControlName="baseLang" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+      @for (lang of supportedLanguages(); track lang.code) {
+        <option [value]="lang.code">{{ lang.name }}</option>
+      }
+    </select>
+  </div>
+  <div class="flex-1">
+    <label for="targetLang" class="block text-sm font-medium text-gray-700">Target Language</label>
+    <select id="targetLang" formControlName="targetLang" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+      @for (lang of supportedLanguages(); track lang.code) {
+        <option [value]="lang.code">{{ lang.name }}</option>
+      }
+    </select>
+  </div>
+</div>
