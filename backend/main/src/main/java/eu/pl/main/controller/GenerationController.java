@@ -1,6 +1,6 @@
 package eu.pl.main.controller;
 
-import eu.pl.main.dto.openrouter.FlashcardCollection;
+import eu.pl.main.dto.CollectionResponseDto;
 import eu.pl.main.service.FlashcardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +19,11 @@ public class GenerationController {
     private final FlashcardService flashcardService;
 
     // Inner class to define the request body structure for this endpoint
-    public record FlashcardRequest(String text, String sourceLang, String targetLang) {}
+    public record FlashcardRequest(String name, String text, String sourceLang, String targetLang) {}
 
     @PostMapping("/flashcards")
-    public CompletableFuture<ResponseEntity<FlashcardCollection>> generateFlashcards(@RequestBody FlashcardRequest request) {
-        return flashcardService.generateFlashCardsCollection(request.text(), request.sourceLang(), request.targetLang())
+    public CompletableFuture<ResponseEntity<CollectionResponseDto>> generateFlashcards(@RequestBody FlashcardRequest request) {
+        return flashcardService.generateFlashCardsCollection(request.name(), request.text(), request.sourceLang(), request.targetLang())
             .thenApply(ResponseEntity::ok)
             .exceptionally(ex -> ResponseEntity.status(500).build()); // Basic error handling, to be refined by GlobalExceptionHandler
     }

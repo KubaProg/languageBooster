@@ -28,7 +28,7 @@ public class CollectionService {
         log.info("Returning mock collections for ownerId: {}", ownerId);
         return Arrays.asList(
                 new CollectionResponseDto(
-                        UUID.randomUUID(),
+                        ownerId,
                         "Mock Collection 1",
                         "en",
                         "pl",
@@ -36,7 +36,7 @@ public class CollectionService {
                         5
                 ),
                 new CollectionResponseDto(
-                        UUID.randomUUID(),
+                        ownerId,
                         "Mock Collection 2",
                         "es",
                         "fr",

@@ -25,7 +25,7 @@ public class CollectionController {
     @GetMapping
     public ResponseEntity<List<CollectionResponseDto>> getAllCollections() {
         UUID ownerId = authService.getAuthenticatedUserId();
-        List<CollectionResponseDto> collections = collectionService.getAllCollectionsForUser(ownerId);
+        List<CollectionResponseDto> collections = collectionService.getAllCollectionsForUser(UUID.fromString("f885b81a-6541-47e1-ab5e-b8bf5d6a00a7"));
         return ResponseEntity.ok(collections);
     }
 }

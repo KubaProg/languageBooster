@@ -2,7 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { finalize } from 'rxjs';
+import {finalize, Observable} from 'rxjs';
 
 import { LanguageSelectorComponent } from '../../shared/components/language-selector/language-selector.component';
 import { SourceInputComponent } from '../../shared/components/source-input/source-input.component';
@@ -47,8 +47,23 @@ export class GenerationFormComponent {
 
     this.isLoading.set(true);
 
-    this.collectionService.create(this.generationForm.getRawValue())
-      .pipe(
+    const formValue = this.generationForm.getRawValue();
+
+    let submissionObservable: Observable<any>;
+
+    if (formValue.source.type === 'text') {
+      submissionObservable = this.collectionService.generateFromText(
+        formValue.name,
+        formValue.source.value,
+        formValue.languages.baseLang,
+        formValue.languages.targetLang
+      );
+    } else {
+      // Fallback to original method for other source types, e.g., file uploads
+      submissionObservable = this.collectionService.create(formValue);
+    }
+
+    submissionObservable.pipe(
         finalize(() => this.isLoading.set(false))
       )
       .subscribe({

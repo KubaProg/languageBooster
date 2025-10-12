@@ -8,7 +8,13 @@ import { CreateCollectionMetadata, CreateCollectionResponse, GenerationFormViewM
 })
 export class CollectionService {
   private http = inject(HttpClient);
-  private apiUrl = '/api/v1/collections'; // TODO: Use environment variable
+  private collectionsApiUrl = '/api/v1/collections';
+  private generationApiUrl = '/api/v1/generate';
+
+  public generateFromText(name: string, text: string, sourceLang: string, targetLang: string): Observable<CreateCollectionResponse> {
+    const payload = { name, text, sourceLang, targetLang };
+    return this.http.post<CreateCollectionResponse>(`${this.generationApiUrl}/flashcards`, payload);
+  }
 
   public create(formValue: GenerationFormViewModel): Observable<CreateCollectionResponse> {
     const formData = new FormData();
@@ -30,6 +36,6 @@ export class CollectionService {
       }
     }
 
-    return this.http.post<CreateCollectionResponse>(`${this.apiUrl}/from-source`, formData);
+    return this.http.post<CreateCollectionResponse>(`${this.collectionsApiUrl}/from-source`, formData);
   }
 }
