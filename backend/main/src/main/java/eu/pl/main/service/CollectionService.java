@@ -9,8 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.OffsetDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -20,41 +18,26 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CollectionService {
 
-    // private final CollectionRepository collectionRepository;
-    // private final CardRepository cardRepository;
+    private final CollectionRepository collectionRepository;
+    private final CardRepository cardRepository;
 
     @Transactional(readOnly = true)
     public List<CollectionResponseDto> getAllCollectionsForUser(UUID ownerId) {
-        log.info("Returning mock collections for ownerId: {}", ownerId);
-        return Arrays.asList(
-                new CollectionResponseDto(
-                        ownerId,
-                        "Mock Collection 1",
-                        "en",
-                        "pl",
-                        OffsetDateTime.now(),
-                        5
-                ),
-                new CollectionResponseDto(
-                        ownerId,
-                        "Mock Collection 2",
-                        "es",
-                        "fr",
-                        OffsetDateTime.now(),
-                        10
-                )
-        );
+        log.info("Fetching collections for ownerId: {}", ownerId);
+        return collectionRepository.findByOwnerId(ownerId).stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
     }
 
-    // private CollectionResponseDto mapToDto(Collection collection) {
-    //     long cardCount = cardRepository.countByCollectionId(collection.getId());
-    //     return new CollectionResponseDto(
-    //             collection.getId(),
-    //             collection.getName(),
-    //             collection.getBaseLang(),
-    //             collection.getTargetLang(),
-    //             collection.getCreatedAt(),
-    //             cardCount
-    //     );
-    // }
+    private CollectionResponseDto mapToDto(Collection collection) {
+        long cardCount = cardRepository.countByCollectionId(collection.getId());
+        return new CollectionResponseDto(
+                collection.getId(),
+                collection.getName(),
+                collection.getBaseLang(),
+                collection.getTargetLang(),
+                collection.getCreatedAt(),
+                cardCount
+        );
+    }
 }

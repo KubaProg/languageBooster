@@ -63,7 +63,7 @@ public class FlashcardService {
                                 .name(name)
                                 .baseLang(sourceLang)
                                 .targetLang(targetLang)
-                                .ownerId(UUID.fromString("f885b81a-6541-47e1-ab5e-b8bf5d6a00a7")) // Hardcoded user ID
+                                .ownerId(authService.getAuthenticatedUserId())
                                 .createdAt(OffsetDateTime.now())
                                 .build();
                         Collection savedCollection = collectionRepository.save(collection);
