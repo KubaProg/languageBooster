@@ -46,6 +46,7 @@ public class FlashcardService {
         String systemPrompt = buildSystemPrompt(sourceLang, targetLang);
         String userPrompt = sourceText;
         Map<String, Object> schema = buildFlashcardSchema();
+        UUID authenticatedUserId = authService.getAuthenticatedUserId();
 
         var messages = List.of(new Message("system", systemPrompt), new Message("user", userPrompt));
         var responseFormat = buildResponseFormat(schema);

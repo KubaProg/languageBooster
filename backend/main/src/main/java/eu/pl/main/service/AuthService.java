@@ -14,14 +14,30 @@ public class AuthService {
 
     public UUID getAuthenticatedUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof Jwt jwt) {
-            String userId = jwt.getSubject();
-            log.info("Authenticated user ID from JWT: {}", userId);
-            return UUID.fromString(userId);
+
+        if (authentication == null) {
+            log.warn("No authentication in context");
+            throw new IllegalStateException("Unauthenticated");
         }
-        log.warn("Could not retrieve authenticated user ID from security context.");
-        // In a real-world scenario, you might throw an exception here
-        // if the user ID is essential for the operation.
-        return null;
+
+        Object principal = authentication.getPrincipal();
+        if (principal instanceof Jwt jwt) {
+            String sub = jwt.getSubject();
+            if (sub == null || sub.isBlank()) {
+                log.warn("JWT subject (sub) missing");
+                throw new IllegalStateException("Invalid token: subject missing");
+            }
+            try {
+                UUID userId = UUID.fromString(sub);
+                log.debug("Authenticated userId: {}", userId);
+                return userId;
+            } catch (IllegalArgumentException ex) {
+                log.warn("JWT subject is not a UUID: {}", sub);
+                throw new IllegalStateException("Invalid token: subject format");
+            }
+        }
+
+        log.warn("Principal is not a Jwt: {}", principal != null ? principal.getClass() : "null");
+        throw new IllegalStateException("Unauthenticated");
     }
 }
