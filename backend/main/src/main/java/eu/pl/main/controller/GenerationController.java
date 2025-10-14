@@ -22,9 +22,19 @@ public class GenerationController {
     public record FlashcardRequest(String name, String text, String sourceLang, String targetLang) {}
 
     @PostMapping("/flashcards")
-    public CompletableFuture<ResponseEntity<CollectionResponseDto>> generateFlashcards(@RequestBody FlashcardRequest request) {
-        return flashcardService.generateFlashCardsCollection(request.name(), request.text(), request.sourceLang(), request.targetLang())
-            .thenApply(ResponseEntity::ok)
-            .exceptionally(ex -> ResponseEntity.status(500).build()); // Basic error handling, to be refined by GlobalExceptionHandler
+    public ResponseEntity<CollectionResponseDto> generateFlashcards(@RequestBody FlashcardRequest request) {
+        try {
+            CollectionResponseDto response = flashcardService.generateFlashCardsCollection(
+                    request.name(),
+                    request.text(),
+                    request.sourceLang(),
+                    request.targetLang()
+            );
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            // Możesz tu logować lub rzucać dalej do @ControllerAdvice
+            return ResponseEntity.internalServerError().build();
+        }
     }
+
 }
