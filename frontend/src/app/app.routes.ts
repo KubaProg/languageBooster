@@ -1,11 +1,17 @@
-import { Routes } from '@angular/router';
+import { AuthGuard } from './core/guards/auth.guard';
+import { PublicGuard } from './core/guards/public.guard';
+import {Routes} from "@angular/router";
 
 export const routes: Routes = [
-
+    {
+        path: 'auth',
+        loadComponent: () => import('./features/auth/auth.component').then(m => m.AuthComponent),
+        canActivate: [PublicGuard]
+    },
     {
         path: 'app',
         loadComponent: () => import('./shared/components/main-layout/main-layout.component').then(m => m.MainLayoutComponent),
-        // TODO: Add an AuthGuard here with canActivate
+        canActivate: [AuthGuard],
         children: [
             {
                 path: 'collections',
@@ -15,7 +21,6 @@ export const routes: Routes = [
                 path: 'collections/new',
                 loadComponent: () => import('./features/generation-form/generation-form.component').then(m => m.GenerationFormComponent)
             },
-            // TODO: Add dashboard and collection list routes here
             {
                 path: '',
                 redirectTo: 'collections/new',
@@ -28,5 +33,4 @@ export const routes: Routes = [
         redirectTo: '/app',
         pathMatch: 'full'
     }
-    // TODO: Add login/register routes here
 ];

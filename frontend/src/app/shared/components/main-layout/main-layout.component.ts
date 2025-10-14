@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { Router, RouterModule } from "@angular/router";
+import { RouterModule } from "@angular/router";
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-main-layout',
@@ -11,12 +12,9 @@ import { Router, RouterModule } from "@angular/router";
   styleUrl: './main-layout.component.scss'
 })
 export class MainLayoutComponent {
-  private router = inject(Router);
+  private authService = inject(AuthService);
 
-  // TODO: Inject a real AuthService
   public logout(): void {
-    console.log('Logging out...');
-    // authService.logout();
-    this.router.navigate(['/login']);
+    this.authService.signOut();
   }
 }
