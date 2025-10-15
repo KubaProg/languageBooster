@@ -4,7 +4,8 @@
       "backend-rules.md",
       "frontend-rules.md",
       "database-rules.md",
-      "swagger-rules.md"
+      "swagger-rules.md",
+      "vitest-testing.md",
     ]
   }
 }

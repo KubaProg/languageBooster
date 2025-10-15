@@ -16,13 +16,33 @@ This project aims to solve a common problem for language learners: the time-cons
 
 ## Tech Stack
 
-| Category          | Technology                                 |
-| ----------------- |--------------------------------------------|
-| **Backend**       | Java (Spring Boot)                         |
-| **Frontend**      | Angular (`^17.3.0`), TypeScript (`~5.4.2`) |
-| **Database**      | PostgreSQL                                 |
-| **Authentication**| Supabase                                    |
-| **Containerization**| Docker, Docker Compose                     |
+| Category           | Technology                                                   |
+| ------------------ | ------------------------------------------------------------ |
+| **Backend**        | Java (Spring Boot)                                           |
+| **Frontend**       | Angular (`^17.3.0`), TypeScript (`~5.4.2`), TailwindCSS      |
+| **Database**       | PostgreSQL                                                   |
+| **Authentication** | Supabase (with Spring Security)                              |
+| **Containerization**| Docker, Docker Compose                                     |
+| **Backend Testing**| JUnit 5, Mockito, Spring Test, Testcontainers, REST Assured  |
+| **Frontend Testing**| Jest, Playwright, ESLint                  |
+| **CI/CD**          | GitHub Actions                                               |
+
+## Testing
+
+The project follows a comprehensive testing strategy to ensure quality, stability, and security. Testing is performed at multiple levels for both the backend and frontend, as outlined in the detailed test plans.
+
+### Backend Testing Strategy
+
+- **Unit Tests**: Using JUnit 5 and Mockito to verify individual classes and methods in isolation.
+- **Integration Tests**: With Spring Test, MockMvc, and Testcontainers to test the collaboration of components within the Spring context, including database interactions.
+- **API (E2E) Tests**: Using REST Assured to test the public API endpoints from a client's perspective.
+- **Security Tests**: Planned to verify authentication, authorization, and data isolation between users.
+
+### Frontend Testing Strategy
+
+- **Unit & Component Tests**: Using Jest and Angular's TestBed to test components, services, and pipes in isolation.
+- **End-to-End (E2E) Tests**: Using Playwright to simulate full user scenarios in a real browser.
+- **Manual Tests**: Including UI/UX validation against mockups, and cross-browser compatibility checks (Chrome, Firefox, Safari).
 
 ## Getting Started Locally
 
@@ -68,7 +88,7 @@ The following scripts are available for the frontend application and can be run 
 | ----------- | ------------------------------------------------------- |
 | `start`     | Runs the application in development mode (`ng serve`).    |
 | `build`     | Builds the application for production.                  |
-| `test`      | Runs unit tests via Karma.                              |
+| `test`      | Runs unit tests with Jest and generates a coverage report.                              |
 | `lint`      | Lints the codebase using ESLint.                        |
 | `watch`     | Builds the app and watches for file changes.            |
 
