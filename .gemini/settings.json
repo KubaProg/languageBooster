@@ -5,7 +5,7 @@
       "frontend-rules.md",
       "database-rules.md",
       "swagger-rules.md",
-      "vitest-testing.md",
+      "vitest-testing.md"
     ]
   }
 }

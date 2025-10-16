@@ -47,6 +47,14 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
+            "staging": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.staging.ts"
+                }
+              ]
+            },
               "budgets": [
                 {
                   "type": "initial",
@@ -74,6 +82,9 @@
           "configurations": {
             "production": {
               "buildTarget": "frontend:build:production"
+            },
+            "staging": {
+              "buildTarget": "frontend:build:staging"
             },
             "development": {
               "buildTarget": "frontend:build:development"
