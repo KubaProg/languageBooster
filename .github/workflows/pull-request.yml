@@ -67,6 +67,10 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Replace environment variables in staging
         run: |
+          echo "Current directory: $(pwd)"
+          echo "Listing files in root:"
+          ls -l
+          echo "---"
           sed -i 's|__SUPABASE_URL__|${{ secrets.STAGING_SUPABASE_URL }}|g' frontend/src/environments/environment.staging.ts
           sed -i 's|__SUPABASE_KEY__|${{ secrets.STAGING_SUPABASE_KEY }}|g' frontend/src/environments/environment.staging.ts
           sed -i 's|__E2E_USERNAME__|${{ secrets.STAGING_E2E_USERNAME }}|g' frontend/src/environments/environment.staging.ts
