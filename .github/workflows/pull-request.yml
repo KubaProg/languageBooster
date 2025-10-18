@@ -52,29 +52,44 @@ jobs:
     name: E2E Tests
     runs-on: ubuntu-latest
     environment: staging
+    env:
+      SUPABASE_URL: ${{ secrets.STAGING_SUPABASE_URL }}
+      SUPABASE_KEY: ${{ secrets.STAGING_SUPABASE_KEY }}
+      E2E_USERNAME_ID: ${{ secrets.STAGING_E2E_USERNAME_ID }}
+      E2E_USERNAME: ${{ secrets.STAGING_E2E_USERNAME }}
+      E2E_PASSWORD: ${{ secrets.STAGING_E2E_PASSWORD }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+
       - name: Install frontend dependencies
         working-directory: ./frontend
         run: npm install
+
       - name: Install Playwright browsers
         working-directory: ./frontend
-        run: npx playwright install --with-deps chromium
-      - name: Replace environment variables in staging
+        run: npx playwright install --with-deps
+
+      - name: Generate environment.staging.ts from secrets
+        working-directory: ./frontend
         run: |
-          echo "Current directory: $(pwd)"
-          echo "Listing files in root:"
-          ls -l
-          echo "---"
-          sed -i 's|__SUPABASE_URL__|${{ secrets.STAGING_SUPABASE_URL }}|g' frontend/src/environments/environment.staging.ts
-          sed -i 's|__SUPABASE_KEY__|${{ secrets.STAGING_SUPABASE_KEY }}|g' frontend/src/environments/environment.staging.ts
-          sed -i 's|__E2E_USERNAME__|${{ secrets.STAGING_E2E_USERNAME }}|g' frontend/src/environments/environment.staging.ts
-          sed -i 's|__E2E_PASSWORD__|${{ secrets.STAGING_E2E_PASSWORD }}|g' frontend/src/environments/environment.staging.ts
+          mkdir -p src/environments
+          cat > src/environments/environment.staging.ts <<EOF
+          export const environment = {
+            production: false,
+            supabaseUrl: '${SUPABASE_URL}',
+            supabaseKey: '${SUPABASE_KEY}',
+            e2eUsernameId: '${E2E_USERNAME_ID}',
+            e2eUsername: '${E2E_USERNAME}',
+            e2ePassword: '${E2E_PASSWORD}'
+          };
+          EOF
+
       - name: Run e2e tests
         working-directory: ./frontend
         run: npm run test:e2e
