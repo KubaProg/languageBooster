@@ -22,4 +22,4 @@ alwaysApply: false
 - Implement test hooks for setup and teardown
 - Use expect assertions with specific matchers
 - Leverage parallel execution for faster test runs
-- Follow 'Arrange', 'Act', 'Assert' approach to test structure for simplicity and readability.
+- Follow 'Arrange', 'Act', 'Assert' approach to test \\structure for simplicity and readability.

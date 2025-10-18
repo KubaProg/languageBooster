@@ -11,7 +11,7 @@ alwaysApply: false
 - Check if `.env.example` exists in project root to identify key `env:` variables
 - Always use `git branch -a | cat` to verify whether we use `main` or `master` branch
 - Always use `env:` variables and secrets attached to jobs instead of global workflows
-- Always use `npm ci` for Node-based dependency setup
+- Always use `npm install` for Node-based dependency setup
 - Extract common steps into composite actions in separate files
 - Once you're done, as a final step conduct the following: 
 
