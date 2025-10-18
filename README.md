@@ -1,4 +1,4 @@
-# LanguageBooster
+# LanguageBooster v1
 
 LanguageBooster is a web application that transforms your personal study materials into customized language flashcards using AI. Simply paste text or upload a PDF, and let the app generate a new learning deck for you in seconds.
 
