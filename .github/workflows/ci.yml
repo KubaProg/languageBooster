@@ -9,17 +9,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
 
       - name: Build Frontend
         working-directory: ./frontend
         run: |
-          npm install
+          npm ci
           npm run build
 
       - name: Set up JDK 21
@@ -30,4 +30,4 @@ jobs:
 
       - name: Build Backend
         working-directory: ./backend/main
-        run: ./mvnw -B install\
+        run: ./mvnw -B install
