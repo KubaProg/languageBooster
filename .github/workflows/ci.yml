@@ -19,7 +19,7 @@ jobs:
       - name: Build Frontend
         working-directory: ./frontend
         run: |
-          npm ci
+          npm install
           npm run build
 
       - name: Set up JDK 21
@@ -27,6 +27,9 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
+
+      - name: Make mvnw executable
+        run: chmod +x backend/main/mvnw
 
       - name: Build Backend
         working-directory: ./backend/main
