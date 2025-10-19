@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
-  supabaseUrl: 'http://127.0.0.1:54321',
-  supabaseKey: 'sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH'
+  supabaseUrl: process.env["NG_APP_SUPABASE_URL"] ?? '',
+  supabaseKey: process.env["NG_APP_SUPABASE_KEY"] ?? ''
 };
