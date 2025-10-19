@@ -2,5 +2,9 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.75.0",
     "dotenv": "^17.2.3"
+  },
+  "scripts": {
+    "postinstall": "cd frontend && npm install",
+    "build": "cd frontend && npm run build"
   }
 }
