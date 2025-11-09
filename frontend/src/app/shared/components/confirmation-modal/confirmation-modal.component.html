@@ -1,0 +1,18 @@
+<div *ngIf="isVisible" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center">
+  <div class="p-8 border w-96 shadow-lg rounded-md bg-white">
+    <div class="text-center">
+      <h3 class="text-2xl font-bold text-gray-900">Confirm Action</h3>
+      <div class="mt-2 px-7 py-3">
+        <p class="text-lg text-gray-500">{{ message }}</p>
+      </div>
+      <div class="flex justify-center mt-4">
+        <button (click)="confirm()" class="px-4 py-2 bg-green-500 text-white text-base font-medium rounded-md w-24 shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300">
+          Yes
+        </button>
+        <button (click)="cancel()" class="ml-4 px-4 py-2 bg-red-500 text-white text-base font-medium rounded-md w-24 shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300">
+          No
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

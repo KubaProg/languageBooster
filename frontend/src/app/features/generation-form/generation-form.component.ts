@@ -9,6 +9,7 @@ import { SourceInputComponent } from '../../shared/components/source-input/sourc
 import { languageMatchValidator } from './validators/custom-validators';
 import { CollectionService } from '../collection/services/collection.service';
 import { NotificationService } from '../../shared/services/notification.service';
+import { FlashcardRequest } from '../../types/aliases';
 
 @Component({
   selector: 'app-generation-form',
@@ -52,12 +53,13 @@ export class GenerationFormComponent {
     let submissionObservable: Observable<any>;
 
     if (formValue.source.type === 'text') {
-      submissionObservable = this.collectionService.generateFromText(
-        formValue.name,
-        formValue.source.value,
-        formValue.languages.baseLang,
-        formValue.languages.targetLang
-      );
+      const flashcardRequest: FlashcardRequest = {
+        name: formValue.name,
+        text: formValue.source.value,
+        sourceLang: formValue.languages.baseLang,
+        targetLang: formValue.languages.targetLang
+      };
+      submissionObservable = this.collectionService.generateFromText(flashcardRequest);
     } else {
       // Fallback to original method for other source types, e.g., file uploads
       submissionObservable = this.collectionService.create(formValue);

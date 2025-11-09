@@ -1,41 +1,31 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { CreateCollectionMetadata, CreateCollectionResponse, GenerationFormViewModel } from '../../generation-form/types/generation-form.types';
+import { CollectionResponseDto, FlashcardRequest } from '../../../types/aliases';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CollectionService {
-  private http = inject(HttpClient);
-  private collectionsApiUrl = '/api/v1/collections';
-  private generationApiUrl = '/api/v1/generate';
+  private apiUrl = '/api/v1/collections';
+  private generateUrl = '/api/v1/generate/flashcards';
 
-  public generateFromText(name: string, text: string, sourceLang: string, targetLang: string): Observable<CreateCollectionResponse> {
-    const payload = { name, text, sourceLang, targetLang };
-    return this.http.post<CreateCollectionResponse>(`${this.generationApiUrl}/flashcards`, payload);
+  constructor(private http: HttpClient) { }
+
+  getCollections(): Observable<CollectionResponseDto[]> {
+    return this.http.get<CollectionResponseDto[]>(this.apiUrl);
   }
 
-  public create(formValue: GenerationFormViewModel): Observable<CreateCollectionResponse> {
-    const formData = new FormData();
+  deleteCollection(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
 
-    const metadata: CreateCollectionMetadata = {
-      name: formValue.name,
-      baseLang: formValue.languages.baseLang,
-      targetLang: formValue.languages.targetLang,
-      cardsToGenerate: formValue.cardsToGenerate
-    };
+  generateFromText(request: FlashcardRequest): Observable<CollectionResponseDto> {
+    return this.http.post<CollectionResponseDto>(this.generateUrl, request);
+  }
 
-    formData.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
-
-    if (formValue.source) {
-      if (formValue.source.type === 'text') {
-        formData.append('textSource', formValue.source.value as string);
-      } else if (formValue.source.type === 'file' && formValue.source.value instanceof File) {
-        formData.append('fileSource', formValue.source.value, formValue.source.value.name);
-      }
-    }
-
-    return this.http.post<CreateCollectionResponse>(`${this.collectionsApiUrl}/from-source`, formData);
+  create(formValue: any): Observable<CollectionResponseDto> {
+    // Assuming 'create' is a POST request to the collections endpoint
+    return this.http.post<CollectionResponseDto>(this.apiUrl, formValue);
   }
 }
