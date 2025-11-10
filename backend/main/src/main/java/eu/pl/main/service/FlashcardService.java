@@ -110,7 +110,7 @@ public class FlashcardService {
                     .front(f.base())
                     .back(f.translation())
                     .known(false)
-                    .collectionId(savedCollection.getId())
+                    .collection(savedCollection)
                     .createdAt(OffsetDateTime.now())
                     .updatedAt(OffsetDateTime.now())
                     .build();

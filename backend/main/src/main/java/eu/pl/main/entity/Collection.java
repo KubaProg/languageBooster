@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -36,4 +37,7 @@ public class Collection {
 
     @Column(name = "created_at", nullable = false)
     private OffsetDateTime createdAt;
+
+    @OneToMany(mappedBy = "collection", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Card> cards;
 }

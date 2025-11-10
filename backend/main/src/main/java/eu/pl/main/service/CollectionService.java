@@ -6,8 +6,11 @@ import eu.pl.main.repository.CardRepository;
 import eu.pl.main.repository.CollectionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.UUID;
@@ -27,6 +30,21 @@ public class CollectionService {
         return collectionRepository.findByOwnerId(ownerId).stream()
                 .map(this::mapToDto)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void deleteCollection(UUID collectionId, UUID ownerId) {
+        log.info("Attempting to delete collection with ID: {} for owner: {}", collectionId, ownerId);
+
+        Collection collection = collectionRepository.findById(collectionId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Collection not found with ID: " + collectionId));
+
+        if (!collection.getOwnerId().equals(ownerId)) {
+            throw new AccessDeniedException("User is not authorized to delete this collection.");
+        }
+
+        collectionRepository.deleteById(collectionId);
+        log.info("Collection with ID: {} successfully deleted for owner: {}", collectionId, ownerId);
     }
 
     private CollectionResponseDto mapToDto(Collection collection) {

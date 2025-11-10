@@ -31,8 +31,9 @@ public class Card {
     @Column(nullable = false)
     private boolean known;
 
-    @Column(name = "collection_id", nullable = false)
-    private UUID collectionId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "collection_id", nullable = false)
+    private Collection collection;
 
     @Column(name = "created_at", nullable = false)
     private OffsetDateTime createdAt;
