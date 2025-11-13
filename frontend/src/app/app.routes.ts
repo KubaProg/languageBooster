@@ -22,6 +22,10 @@ export const routes: Routes = [
                 loadComponent: () => import('./features/generation-form/generation-form.component').then(m => m.GenerationFormComponent)
             },
             {
+                path: 'collections/:id/study',
+                loadComponent: () => import('./features/collection-study/collection-study.component').then(m => m.CollectionStudyComponent)
+            },
+            {
                 path: '',
                 redirectTo: 'collections/new',
                 pathMatch: 'full'

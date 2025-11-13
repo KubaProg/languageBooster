@@ -1,6 +1,9 @@
 package eu.pl.main.service;
 
+import eu.pl.main.dto.CardDto;
+import eu.pl.main.dto.CollectionDetailsDto;
 import eu.pl.main.dto.CollectionResponseDto;
+import eu.pl.main.entity.Card;
 import eu.pl.main.entity.Collection;
 import eu.pl.main.repository.CardRepository;
 import eu.pl.main.repository.CollectionRepository;
@@ -32,6 +35,32 @@ public class CollectionService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
+    public CollectionDetailsDto getCollectionDetails(UUID collectionId, UUID ownerId) {
+        log.info("Fetching collection details for ID: {} for owner: {}", collectionId, ownerId);
+
+        Collection collection = collectionRepository.findById(collectionId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Collection not found with ID: " + collectionId));
+
+        if (!collection.getOwnerId().equals(ownerId)) {
+            throw new AccessDeniedException("User is not authorized to view this collection.");
+        }
+
+        List<Card> cards = cardRepository.findAllByCollectionId(collectionId);
+        List<CardDto> cardDtos = cards.stream()
+                .map(this::mapToCardDto)
+                .collect(Collectors.toList());
+
+        return new CollectionDetailsDto(
+                collection.getId(),
+                collection.getName(),
+                collection.getBaseLang(),
+                collection.getTargetLang(),
+                collection.getCreatedAt(),
+                cardDtos
+        );
+    }
+
     @Transactional
     public void deleteCollection(UUID collectionId, UUID ownerId) {
         log.info("Attempting to delete collection with ID: {} for owner: {}", collectionId, ownerId);
@@ -56,6 +85,17 @@ public class CollectionService {
                 collection.getTargetLang(),
                 collection.getCreatedAt(),
                 cardCount
+        );
+    }
+
+    private CardDto mapToCardDto(Card card) {
+        return new CardDto(
+                card.getId(),
+                card.getFront(),
+                card.getBack(),
+                card.isKnown(),
+                card.getCreatedAt(),
+                card.getUpdatedAt()
         );
     }
 }

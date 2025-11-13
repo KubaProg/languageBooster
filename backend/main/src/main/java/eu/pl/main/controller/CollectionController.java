@@ -1,5 +1,6 @@
 package eu.pl.main.controller;
 
+import eu.pl.main.dto.CollectionDetailsDto;
 import eu.pl.main.dto.CollectionResponseDto;
 import eu.pl.main.service.AuthService;
 import eu.pl.main.service.CollectionService;
@@ -29,6 +30,13 @@ public class CollectionController {
         UUID ownerId = authService.getAuthenticatedUserId();
         List<CollectionResponseDto> collections = collectionService.getAllCollectionsForUser(ownerId);
         return ResponseEntity.ok(collections);
+    }
+
+    @GetMapping("/{collectionId}")
+    public ResponseEntity<CollectionDetailsDto> getCollectionDetails(@PathVariable UUID collectionId) {
+        UUID ownerId = authService.getAuthenticatedUserId();
+        CollectionDetailsDto collectionDetails = collectionService.getCollectionDetails(collectionId, ownerId);
+        return ResponseEntity.ok(collectionDetails);
     }
 
     @DeleteMapping("/{collectionId}")

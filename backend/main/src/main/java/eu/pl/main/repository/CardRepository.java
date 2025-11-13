@@ -10,4 +10,5 @@ import java.util.UUID;
 @Repository
 public interface CardRepository extends JpaRepository<Card, UUID> {
     long countByCollectionId(UUID collectionId);
+    List<Card> findAllByCollectionId(UUID collectionId);
 }

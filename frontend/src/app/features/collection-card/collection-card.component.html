@@ -1,18 +1,20 @@
-<div class="border p-4 rounded-lg shadow-md">
-  <div class="flex justify-between items-center">
-    <h3 class="text-lg font-bold">{{ collection.name }}</h3>
-    <button (click)="delete()" class="text-gray-500 hover:text-red-500">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-      </svg>
-    </button>
+<a [routerLink]="['/app/collections', collection.id, 'study']" class="block cursor-pointer h-full rounded-lg shadow-md border border-transparent hover:border-blue-500 transition-all duration-200">
+  <div class="p-4 h-full flex flex-col">
+    <div class="flex justify-between items-start">
+      <h3 class="text-lg font-bold">{{ collection.name }}</h3>
+      <button (click)="delete($event)" class="text-gray-500 hover:text-red-500 z-10 relative p-1 -mt-1 -mr-1">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+        </svg>
+      </button>
+    </div>
+    <div class="mt-2 flex-grow flex flex-col justify-end">
+      <p class="text-sm text-gray-600">
+        {{ collection.baseLang }} -> {{ collection.targetLang }}
+      </p>
+      <p class="text-sm text-gray-600">
+        {{ collection.cardCount }} cards
+      </p>
+    </div>
   </div>
-  <div class="mt-2">
-    <p class="text-sm text-gray-600">
-      {{ collection.baseLang }} -> {{ collection.targetLang }}
-    </p>
-    <p class="text-sm text-gray-600">
-      {{ collection.cardCount }} cards
-    </p>
-  </div>
-</div>
+</a>

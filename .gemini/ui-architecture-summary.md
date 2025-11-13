@@ -36,7 +36,7 @@ The application is structured around the following views and user flows:
 - **Learning Flow**:
     - `Collections View`: Displays a list of the user's collections, showing name, language pair, and card count.
     - `Inside of Collection View` (Learning/Flashcard View): This view has two primary modes:
-        - **Learning Mode**: The user sees a card's front, clicks to reveal the back, and chooses "Umiem" (I know) or "Nie umiem" (I don't know). "Umiem" marks the card as known (`PATCH /api/v1/cards/{cardId}`).
+        - **Learning Mode** in @ui: The user sees a card's front, clicks to reveal the back, and chooses "Umiem" (I know) or "Nie umiem" (I don't know). "Umiem" marks the card as known (`PATCH /api/v1/cards/{cardId}`).
         - **Edit Mode**: Toggled by an icon. Navigation is disabled. Card text becomes editable on click. A "Save" button appears on change to update the card (`PUT /api/v1/cards/{cardId}`). A delete 'X' icon is also visible to remove the card (`DELETE /api/v1/cards/{cardId}`).
 
 ### 3. API Integration and State Management
