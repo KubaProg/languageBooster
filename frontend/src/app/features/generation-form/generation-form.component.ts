@@ -61,8 +61,12 @@ export class GenerationFormComponent {
       };
       submissionObservable = this.collectionService.generateFromText(flashcardRequest);
     } else {
-      // Fallback to original method for other source types, e.g., file uploads
-      submissionObservable = this.collectionService.create(formValue);
+      const formData = new FormData();
+      formData.append('file', formValue.source.value);
+      formData.append('name', formValue.name);
+      formData.append('sourceLang', formValue.languages.baseLang);
+      formData.append('targetLang', formValue.languages.targetLang);
+      submissionObservable = this.collectionService.generateFromFile(formData);
     }
 
     submissionObservable.pipe(

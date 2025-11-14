@@ -10,9 +10,17 @@ import eu.pl.main.repository.CollectionRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.pdfbox.io.RandomAccessRead;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
+import org.apache.pdfbox.io.RandomAccessReadBuffer;
 
+
+import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.*;
 
@@ -29,6 +37,38 @@ public class FlashcardService {
 
     @Value("${openrouter.default-model}")
     private String defaultModel;
+
+    @Transactional
+    public CollectionResponseDto generateFlashCardsCollectionFromFile(String name,
+                                                                      MultipartFile file,
+                                                                      String sourceLang,
+                                                                      String targetLang) throws IOException {
+        String text = extractTextFromFile(file);
+        return generateFlashCardsCollection(name, text, sourceLang, targetLang);
+    }
+
+    private String extractTextFromFile(MultipartFile file) throws IOException {
+        String fileExtension = getFileExtension(file.getOriginalFilename());
+        if ("pdf".equalsIgnoreCase(fileExtension)) {
+            return extractTextFromPdf(file);
+        }
+        // Add support for other file types here
+        throw new IllegalArgumentException("Unsupported file type: " + fileExtension);
+    }
+
+    private String extractTextFromPdf(MultipartFile file) throws IOException {
+        try (PDDocument document = Loader.loadPDF(new RandomAccessReadBuffer(file.getInputStream()))) {
+            PDFTextStripper pdfStripper = new PDFTextStripper();
+            return pdfStripper.getText(document);
+        }
+    }
+
+    private String getFileExtension(String fileName) {
+        if (fileName == null || fileName.lastIndexOf('.') == -1) {
+            return "";
+        }
+        return fileName.substring(fileName.lastIndexOf('.') + 1);
+    }
 
     /**
      * Wersja prosta/synchroniczna: wywołanie klienta, parsowanie JSON, zapis do DB, zwrot DTO.

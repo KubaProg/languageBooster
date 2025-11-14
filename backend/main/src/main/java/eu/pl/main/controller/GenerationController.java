@@ -7,7 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -37,4 +39,21 @@ public class GenerationController {
         }
     }
 
+    @PostMapping("/flashcards-from-file")
+    public ResponseEntity<CollectionResponseDto> generateFlashcardsFromFile(@RequestParam("file") MultipartFile file,
+                                                                            @RequestParam("name") String name,
+                                                                            @RequestParam("sourceLang") String sourceLang,
+                                                                            @RequestParam("targetLang") String targetLang) {
+        try {
+            CollectionResponseDto response = flashcardService.generateFlashCardsCollectionFromFile(
+                    name,
+                    file,
+                    sourceLang,
+                    targetLang
+            );
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
 }

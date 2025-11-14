@@ -8,7 +8,8 @@ import { CollectionResponseDto, FlashcardRequest } from '../../../types/aliases'
 })
 export class CollectionService {
   private apiUrl = '/api/v1/collections';
-  private generateUrl = '/api/v1/generate/flashcards';
+  private generateTextUrl = '/api/v1/generate/flashcards';
+  private generateFileUrl = '/api/v1/generate/flashcards-from-file';
 
   constructor(private http: HttpClient) { }
 
@@ -21,11 +22,10 @@ export class CollectionService {
   }
 
   generateFromText(request: FlashcardRequest): Observable<CollectionResponseDto> {
-    return this.http.post<CollectionResponseDto>(this.generateUrl, request);
+    return this.http.post<CollectionResponseDto>(this.generateTextUrl, request);
   }
 
-  create(formValue: any): Observable<CollectionResponseDto> {
-    // Assuming 'create' is a POST request to the collections endpoint
-    return this.http.post<CollectionResponseDto>(this.apiUrl, formValue);
+  generateFromFile(formData: FormData): Observable<CollectionResponseDto> {
+    return this.http.post<CollectionResponseDto>(this.generateFileUrl, formData);
   }
 }
