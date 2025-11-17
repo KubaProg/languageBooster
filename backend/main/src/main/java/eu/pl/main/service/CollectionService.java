@@ -46,7 +46,7 @@ public class CollectionService {
             throw new AccessDeniedException("User is not authorized to view this collection.");
         }
 
-        List<Card> cards = cardRepository.findAllByCollectionId(collectionId);
+        List<Card> cards = cardRepository.findAllByCollectionIdAndKnownIsFalse(collectionId);
         List<CardDto> cardDtos = cards.stream()
                 .map(this::mapToCardDto)
                 .collect(Collectors.toList());
@@ -74,6 +74,21 @@ public class CollectionService {
 
         collectionRepository.deleteById(collectionId);
         log.info("Collection with ID: {} successfully deleted for owner: {}", collectionId, ownerId);
+    }
+
+    @Transactional
+    public void resetCollection(UUID collectionId, UUID ownerId) {
+        log.info("Attempting to reset collection with ID: {} for owner: {}", collectionId, ownerId);
+
+        Collection collection = collectionRepository.findById(collectionId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Collection not found with ID: " + collectionId));
+
+        if (!collection.getOwnerId().equals(ownerId)) {
+            throw new AccessDeniedException("User is not authorized to reset this collection.");
+        }
+
+        cardRepository.resetKnownStatusForCollection(collectionId);
+        log.info("Collection with ID: {} successfully reset for owner: {}", collectionId, ownerId);
     }
 
     private CollectionResponseDto mapToDto(Collection collection) {

@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, RouterLink} from '@angular/router';
 import { CollectionApiService } from '../../services/collection-api.service';
 import { CardDto, CollectionDetailsDto } from '../../types/aliases';
 import { CommonModule } from '@angular/common';
@@ -11,7 +11,7 @@ import { tap } from 'rxjs/operators';
 @Component({
   selector: 'app-collection-study',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, FormsModule],
+  imports: [CommonModule, HttpClientModule, FormsModule, RouterLink],
   templateUrl: './collection-study.component.html',
   styleUrl: './collection-study.component.scss'
 })
@@ -30,15 +30,7 @@ export class CollectionStudyComponent implements OnInit {
   editedBack: string = '';
 
   ngOnInit(): void {
-    const collectionId = this.route.snapshot.paramMap.get('id');
-    if (collectionId) {
-      this.collectionApiService.getCollectionDetails(collectionId).pipe(
-        tap(collection => {
-          this.collectionDetails = collection;
-          this.cardsToReview = [...collection.cards]; // Initialize with all cards
-        })
-      ).subscribe();
-    }
+    this.loadCollection();
   }
 
   get currentCard(): CardDto | null {
@@ -108,6 +100,33 @@ export class CollectionStudyComponent implements OnInit {
   markAsUnknown(): void {
     if (this.currentCard) {
       this.nextCard();
+    }
+  }
+
+  resetCollection(): void {
+    if (this.collectionDetails && confirm('Are you sure you want to reset this collection? All cards will be marked as unknown.')) {
+      this.collectionApiService.resetCollection(this.collectionDetails.id).subscribe({
+        next: () => {
+          this.loadCollection();
+        },
+        error: (err) => {
+          console.error('Failed to reset collection:', err);
+        }
+      });
+    }
+  }
+
+  private loadCollection(): void {
+    const collectionId = this.route.snapshot.paramMap.get('id');
+    if (collectionId) {
+      this.collectionApiService.getCollectionDetails(collectionId).pipe(
+        tap(collection => {
+          this.collectionDetails = collection;
+          this.cardsToReview = [...collection.cards];
+          this.currentCardIndex = 0;
+          this.isCardFlipped = false;
+        })
+      ).subscribe();
     }
   }
 

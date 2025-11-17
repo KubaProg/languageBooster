@@ -2,8 +2,8 @@ export const environment = {
   production: false,
   supabaseUrl: '__SUPABASE_URL__',
   supabaseKey: '__SUPABASE_KEY__',
-  e2eUsernameId: '6a0bf718-2ba0-43e9-b7d8-c27b172ce499',
-  e2eUsername: '__E2E_USERNAME__',
-  e2ePassword: '__E2E_PASSWORD__'
+  e2eUsernameId: '8fa344df-6993-4351-8856-1164d483bdb0',
+  e2eUsername: 'cf.jp@interia.pl',
+  e2ePassword: 'dupa123'
 };
 

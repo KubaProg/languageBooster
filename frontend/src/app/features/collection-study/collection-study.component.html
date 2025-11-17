@@ -4,10 +4,13 @@
       <div>
         <h1 class="text-2xl font-bold">{{ collectionDetails.name }}</h1>
         <p class="text-gray-600">{{ collectionDetails.baseLang }} -> {{ collectionDetails.targetLang }}</p>
-        <p class="text-gray-600">{{ cardsToReview.length }} cards remaining</p>
+        <p data-testid="cards-remaining" class="text-gray-600">{{ cardsToReview.length }} cards remaining</p>
       </div>
       <button (click)="toggleEditMode()" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg shadow-md hover:bg-gray-300">
         {{ isEditMode ? 'Cancel' : 'Edit' }}
+      </button>
+      <button (click)="resetCollection()" class="px-4 py-2 bg-yellow-400 text-white rounded-lg shadow-md hover:bg-yellow-500 ml-2">
+        Reset
       </button>
     </div>
 

@@ -26,4 +26,8 @@ export class CollectionApiService {
   deleteCard(cardId: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/api/v1/cards/${cardId}`);
   }
+
+  resetCollection(collectionId: string): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/api/v1/collections/${collectionId}/reset`, {});
+  }
 }

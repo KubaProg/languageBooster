@@ -10,10 +10,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+
 import java.util.UUID;
 
 @RestController
@@ -43,6 +45,13 @@ public class CollectionController {
     public ResponseEntity<Void> deleteCollection(@PathVariable UUID collectionId) {
         UUID ownerId = authService.getAuthenticatedUserId();
         collectionService.deleteCollection(collectionId, ownerId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{collectionId}/reset")
+    public ResponseEntity<Void> resetCollection(@PathVariable UUID collectionId) {
+        UUID ownerId = authService.getAuthenticatedUserId();
+        collectionService.resetCollection(collectionId, ownerId);
         return ResponseEntity.noContent().build();
     }
 }
