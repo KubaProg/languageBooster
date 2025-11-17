@@ -21,16 +21,28 @@
 
 #### TAILWIND
 
-- Use the @layer directive to organize styles into components, utilities, and base layers
-- Implement Just-in-Time (JIT) mode for development efficiency and smaller CSS bundles
-- Use arbitrary values with square brackets (e.g., w-[123px]) for precise one-off designs
-- Leverage the @apply directive in component classes to reuse utility combinations
-- Implement the Tailwind configuration file for customizing theme, plugins, and variants
-- Use component extraction for repeated UI patterns instead of copying utility classes
-- Leverage the theme() function in CSS for accessing Tailwind theme values
-- Implement dark mode with the dark: variant
-- Use responsive variants (sm:, md:, lg:, etc.) for adaptive designs
-- Leverage state variants (hover:, focus:, active:, etc.) for interactive elements
+**Configuration & Theming**
+- Implement the Tailwind configuration file (`tailwind.config.js`) for customizing theme, plugins, and variants.
+- Define a consistent spacing scale in `theme.extend.spacing` to be used for padding, margins, and gaps. Prefer theme values (e.g., `p-4`) over arbitrary values to maintain design consistency.
+- Establish a clear typographic scale in `theme.extend.fontSize` and a clean, sans-serif font family to ensure readable and consistent text.
+- Define a subtle elevation system using custom shadow styles in `theme.extend.boxShadow` (e.g., `shadow-card`, `shadow-card-hover`) for consistent depth.
+- Use the `theme()` function in CSS for accessing Tailwind theme values when writing custom CSS.
+
+**Layout & Structure**
+- Use the `@layer` directive to organize custom styles into `base`, `components`, and `utilities` layers.
+- For card grids, use CSS Grid with responsive column definitions (e.g., `grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`). For fluid grids, consider using arbitrary values for `grid-template-columns`.
+- Use responsive variants (`sm:`, `md:`, `lg:`, etc.) for creating adaptive designs that work across all screen sizes.
+
+**Component Styling & Interactivity**
+- Leverage the `@apply` directive sparingly in component classes to reuse combinations of utilities for common UI elements. Prefer creating well-structured components.
+- Use component extraction for repeated UI patterns instead of copying utility classes.
+- Apply interactive styles using state variants like `hover:`, `focus:`, `active:`.
+- Ensure keyboard focus is always visible by using `focus-visible:` to apply distinct outline, border, or shadow styles.
+- Implement dark mode with the `dark:` variant where applicable.
+
+**Development & Optimization**
+- Implement Just-in-Time (JIT) mode for development efficiency and smaller CSS bundles.
+- Use arbitrary values with square brackets (e.g., `w-[123px]`) only for precise, one-off designs that are not covered by the theme.
 
 ### Guidelines for ACCESSIBILITY
 

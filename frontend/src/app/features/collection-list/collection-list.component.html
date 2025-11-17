@@ -1,18 +1,18 @@
-<div class="flex justify-between items-center mb-4">
+<div class="flex justify-between items-center mb-6">
   <h2 class="text-2xl font-bold">My Collections</h2>
-  <button (click)="navigateToCreateCollection()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+  <button (click)="navigateToCreateCollection()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
     Create New Collection
   </button>
 </div>
 
-<div *ngIf="collections.length > 0; else noCollections" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+<div *ngIf="collections.length > 0; else noCollections" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
   <app-collection-card *ngFor="let collection of collections" [collection]="collection" (onDelete)="deleteCollection($event)"></app-collection-card>
 </div>
 
 <ng-template #noCollections>
   <div class="text-center py-12">
     <p class="text-lg text-gray-500">No collections found.</p>
-    <button (click)="navigateToCreateCollection()" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+    <button (click)="navigateToCreateCollection()" class="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
       Create Your First Collection
     </button>
   </div>

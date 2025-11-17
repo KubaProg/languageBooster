@@ -1,24 +1,26 @@
-<div class="container mx-auto p-4">
+<div class="container mx-auto p-4 sm:p-6 lg:p-8">
   <ng-container *ngIf="collectionDetails; else loading">
-    <div class="mb-4 flex justify-between items-center">
+    <div class="mb-6 flex justify-between items-center">
       <div>
         <h1 class="text-2xl font-bold">{{ collectionDetails.name }}</h1>
         <p class="text-gray-600">{{ collectionDetails.baseLang }} -> {{ collectionDetails.targetLang }}</p>
         <p data-testid="cards-remaining" class="text-gray-600">{{ cardsToReview.length }} cards remaining</p>
       </div>
-      <button (click)="toggleEditMode()" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg shadow-md hover:bg-gray-300">
-        {{ isEditMode ? 'Cancel' : 'Edit' }}
-      </button>
-      <button (click)="resetCollection()" class="px-4 py-2 bg-yellow-400 text-white rounded-lg shadow-md hover:bg-yellow-500 ml-2">
-        Reset
-      </button>
+      <div class="flex items-center">
+        <button (click)="toggleEditMode()" class="px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+          {{ isEditMode ? 'Cancel' : 'Edit' }}
+        </button>
+        <button (click)="resetCollection()" class="ml-3 px-4 py-2 bg-yellow-400 text-white rounded-md shadow-sm text-sm font-medium hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+          Reset
+        </button>
+      </div>
     </div>
 
     <div *ngIf="currentCard; else noCards">
-      <div class="flashcard-container w-full max-w-md mx-auto bg-white rounded-lg shadow-lg p-6"
+      <div class="flashcard-container w-full max-w-xl mx-auto bg-white rounded-lg shadow-card p-6"
            [class.cursor-pointer]="!isEditMode"
            (click)="!isEditMode && (isCardFlipped = !isCardFlipped)">
-        <div class="flashcard-content text-center text-2xl font-semibold min-h-[100px] flex items-center justify-center">
+        <div class="flashcard-content text-center text-3xl font-semibold min-h-[150px] flex items-center justify-center">
           <ng-container *ngIf="!isEditMode">
             <ng-container *ngIf="!isCardFlipped">
               {{ currentCard.front }}
@@ -28,9 +30,9 @@
             </ng-container>
           </ng-container>
           <ng-container *ngIf="isEditMode">
-            <div class="w-full">
-              <textarea [(ngModel)]="editedFront" class="w-full border rounded p-2 text-base" rows="3"></textarea>
-              <textarea [(ngModel)]="editedBack" class="w-full border rounded p-2 mt-2 text-base" rows="3"></textarea>
+            <div class="w-full space-y-4">
+              <textarea [(ngModel)]="editedFront" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg" rows="3"></textarea>
+              <textarea [(ngModel)]="editedBack" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg" rows="3"></textarea>
             </div>
           </ng-container>
         </div>
@@ -38,32 +40,34 @@
 
       <div *ngIf="!isEditMode" class="flex justify-center space-x-4 mt-6">
         <button (click)="markAsKnown()"
-                class="px-6 py-3 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition-colors duration-200">
+                class="px-6 py-3 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
           Umiem
         </button>
         <button (click)="markAsUnknown()"
-                class="px-6 py-3 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600 transition-colors duration-200">
+                class="px-6 py-3 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
           Nie umiem
         </button>
       </div>
 
       <div *ngIf="isEditMode" class="flex justify-center space-x-4 mt-6">
         <button (click)="saveChanges()"
-                class="px-6 py-3 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition-colors duration-200">
+                class="px-6 py-3 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
           Save
         </button>
         <button (click)="deleteCard()"
-                class="px-6 py-3 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600 transition-colors duration-200">
+                class="px-6 py-3 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
           Delete
         </button>
       </div>
     </div>
     <ng-template #noCards>
-      <p class="text-center text-gray-500">This collection has no cards to review.</p>
-      <div class="flex justify-center mt-4">
-        <button routerLink="/app/collections" class="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600">
-          Back to Collections
-        </button>
+      <div class="text-center py-12">
+        <p class="text-lg text-gray-500">This collection has no cards to review.</p>
+        <div class="flex justify-center mt-4">
+          <button routerLink="/app/collections" class="px-4 py-2 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            Back to Collections
+          </button>
+        </div>
       </div>
     </ng-template>
 
