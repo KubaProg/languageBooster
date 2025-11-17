@@ -6,7 +6,7 @@ const path = require('path');
 const envProdFile = `
 export const environment = {
   production: true,
-  apiUrl: '${process.env.NG_APP_API_URL || ''}',
+  apiUrl: '${process.env.NG_APP_API_URL || 'https://language-booster-backend.fly.dev'}',
   supabaseUrl: '${process.env.NG_APP_SUPABASE_URL || ''}',
   supabaseKey: '${process.env.NG_APP_SUPABASE_KEY || ''}',
 };
