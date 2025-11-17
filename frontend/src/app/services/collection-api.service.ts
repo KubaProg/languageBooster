@@ -2,14 +2,13 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CollectionDetailsDto } from '../types/aliases';
-import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CollectionApiService {
   private http = inject(HttpClient);
-  private apiUrl = environment.apiUrl;
+  private apiUrl = 'https://language-booster-backend.fly.dev';
 
   getCollectionDetails(collectionId: string): Observable<CollectionDetailsDto> {
     return this.http.get<CollectionDetailsDto>(`${this.apiUrl}/api/v1/collections/${collectionId}`);
