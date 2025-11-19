@@ -7,5 +7,13 @@
       "swagger-rules.md",
       "vitest-testing.md"
     ]
+  },
+  "mcpServers": {
+    "10x-mvp-tracker": {
+      "command": "npx",
+      "args": [
+        "@przeprogramowani/10x-mvp-tracker"
+      ]
+    }
   }
 }

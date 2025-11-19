@@ -8,7 +8,7 @@ import { CollectionDetailsDto } from '../types/aliases';
 })
 export class CollectionApiService {
   private http = inject(HttpClient);
-  private apiUrl = 'https://language-booster-backend.fly.dev';
+  private apiUrl = 'http://localhost:8080';
 
   getCollectionDetails(collectionId: string): Observable<CollectionDetailsDto> {
     return this.http.get<CollectionDetailsDto>(`${this.apiUrl}/api/v1/collections/${collectionId}`);

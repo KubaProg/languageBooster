@@ -29,7 +29,7 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Value("${app.cors.allowed-origins:http://localhost:4200}")
+    @Value("${app.cors.allowed-origins:*}")
     private List<String> allowedOrigins;
 
     @Value("${app.jwt.issuer:}")
@@ -38,7 +38,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtDecoder jwtDecoder) throws Exception {
         http
-                .cors(c -> c.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
@@ -71,16 +70,16 @@ public class SecurityConfig {
      *   spring.security.oauth2.resourceserver.jwt.issuer-uri=https://<PROJECT_REF>.supabase.co/auth/v1
      *   (optionally) spring.security.oauth2.resourceserver.jwt.jwk-set-uri=https://<PROJECT_REF>.supabase.co/auth/v1/keys
      */
-    @Bean
-    @ConditionalOnProperty(prefix = "spring.security.oauth2.resourceserver.jwt", name = "issuer-uri")
-    JwtDecoder jwksDecoder(
-            @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}") String issuer
-    ) {
-        NimbusJwtDecoder decoder = JwtDecoders.fromIssuerLocation(issuer);
-        OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuer);
-        decoder.setJwtValidator(new DelegatingOAuth2TokenValidator<>(withIssuer));
-        return decoder;
-    }
+//    @Bean
+//    @ConditionalOnProperty(prefix = "spring.security.oauth2.resourceserver.jwt", name = "issuer-uri")
+//    JwtDecoder jwksDecoder(
+//            @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}") String issuer
+//    ) {
+//        NimbusJwtDecoder decoder = JwtDecoders.fromIssuerLocation(issuer);
+//        OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuer);
+//        decoder.setJwtValidator(new DelegatingOAuth2TokenValidator<>(withIssuer));
+//        return decoder;
+//    }
 
     /**
      * === Local Supabase (HS256) path ===

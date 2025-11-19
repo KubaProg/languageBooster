@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  apiUrl: 'https://language-booster-backend.fly.dev',
+  apiUrl: 'http://localhost:8080',
   supabaseUrl: '__SUPABASE_URL__',
   supabaseKey: '__SUPABASE_KEY__',
   e2eUsernameId: '8fa344df-6993-4351-8856-1164d483bdb0',

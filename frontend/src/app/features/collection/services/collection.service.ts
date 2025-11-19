@@ -7,9 +7,9 @@ import { CollectionResponseDto, FlashcardRequest } from '../../../types/aliases'
   providedIn: 'root'
 })
 export class CollectionService {
-  private apiUrl = 'https://language-booster-backend.fly.dev/api/v1/collections';
-  private generateTextUrl = 'https://language-booster-backend.fly.dev/api/v1/generate/flashcards';
-  private generateFileUrl = 'https://language-booster-backend.fly.dev/api/v1/generate/flashcards-from-file';
+  private apiUrl = 'http://localhost:8080/api/v1/collections';
+  private generateTextUrl = 'http://localhost:8080/api/v1/generate/flashcards';
+  private generateFileUrl = 'http://localhost:8080/api/v1/generate/flashcards-from-file';
 
   constructor(private http: HttpClient) { }
 

@@ -44,4 +44,4 @@ ENV SPRING_PROFILES_ACTIVE=docker
 
 # Command to run the application
 # The secrets will be passed as environment variables by Fly.io
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar", "--server.address=0.0.0.0", "--server.port=8080"]
