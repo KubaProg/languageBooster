@@ -1,0 +1,49 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - navigation [ref=e4]:
+    - generic [ref=e6]:
+      - link "LanguageBooster" [ref=e7] [cursor=pointer]:
+        - /url: "#/app/dashboard"
+      - generic [ref=e8]:
+        - link "My Collections" [ref=e9] [cursor=pointer]:
+          - /url: "#/app/collections"
+        - link "Create New" [ref=e10] [cursor=pointer]:
+          - /url: "#/app/collections/new"
+      - button "Logout" [ref=e12] [cursor=pointer]
+  - main [ref=e13]:
+    - generic [ref=e16]:
+      - heading "Create New Collection" [level=1] [ref=e17]
+      - generic [ref=e18]:
+        - generic [ref=e19]:
+          - generic [ref=e20]: Collection Name
+          - textbox "Collection Name" [ref=e21]: My E2E Test Collection 1763577641917
+        - generic [ref=e24]:
+          - generic [ref=e25]:
+            - generic [ref=e26]: Base Language
+            - combobox "Base Language" [ref=e27]:
+              - option "Polish"
+              - option "English" [selected]
+              - option "Spanish"
+              - option "German"
+          - generic [ref=e28]:
+            - generic [ref=e29]: Target Language
+            - combobox "Target Language" [ref=e30]:
+              - option "Polish" [selected]
+              - option "English"
+              - option "Spanish"
+              - option "German"
+        - generic [ref=e31]:
+          - generic [ref=e32]: Number of Cards to Generate
+          - spinbutton "Number of Cards to Generate" [ref=e33]: "1"
+        - generic [ref=e36]:
+          - navigation "Tabs" [ref=e38]:
+            - button "Paste Text" [ref=e39] [cursor=pointer]
+            - button "Upload PDF" [ref=e40] [cursor=pointer]
+          - generic [ref=e42]:
+            - generic [ref=e43]: Paste your text here
+            - textbox "Paste your text here" [ref=e44]: This is a test sentence for my new collection.
+        - button "Generate" [ref=e46] [cursor=pointer]:
+          - generic [ref=e47]: Generate
+```
