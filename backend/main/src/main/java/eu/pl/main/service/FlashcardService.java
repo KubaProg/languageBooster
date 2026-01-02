@@ -5,24 +5,26 @@ import eu.pl.main.dto.CollectionResponseDto;
 import eu.pl.main.dto.openrouter.*;
 import eu.pl.main.entity.Card;
 import eu.pl.main.entity.Collection;
+import eu.pl.main.exception.flashcard.*;
 import eu.pl.main.repository.CardRepository;
 import eu.pl.main.repository.CollectionRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.pdfbox.io.RandomAccessRead;
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.io.RandomAccessReadBuffer;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.apache.pdfbox.Loader;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.text.PDFTextStripper;
-import org.apache.pdfbox.io.RandomAccessReadBuffer;
-
 
 import java.io.IOException;
 import java.time.OffsetDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -53,7 +55,7 @@ public class FlashcardService {
             return extractTextFromPdf(file);
         }
         // Add support for other file types here
-        throw new IllegalArgumentException("Unsupported file type: " + fileExtension);
+        throw new UnsupportedFileTypeException(fileExtension);
     }
 
     private String extractTextFromPdf(MultipartFile file) throws IOException {
@@ -80,9 +82,6 @@ public class FlashcardService {
                                                               String targetLang) {
         // 1) Autoryzacja – must have użytkownik
         UUID userId = authService.getAuthenticatedUserId();
-        if (userId == null) {
-            throw new IllegalStateException("Brak zalogowanego użytkownika – nie można utworzyć kolekcji.");
-        }
 
         // 2) Prompty + schema
         String systemPrompt = buildSystemPrompt(sourceLang, targetLang);
@@ -110,15 +109,15 @@ public class FlashcardService {
             response = openRouterClient.sendChatRequest(request)  // jeśli zwraca Mono -> .block()
                     .block(); // usuń .block() jeżeli klient ma metodę synchroniczną
         } catch (Exception e) {
-            throw new RuntimeException("Błąd podczas wywołania OpenRouter API", e);
+            throw new OpenRouterApiException(e);
         }
         if (response == null || response.choices() == null || response.choices().isEmpty()) {
-            throw new IllegalStateException("Pusta odpowiedź z OpenRouter API.");
+            throw new OpenRouterEmptyResponseException();
         }
 
         String jsonContent = response.choices().get(0).message().content();
         if (jsonContent == null || jsonContent.isBlank()) {
-            throw new IllegalStateException("OpenRouter zwrócił pusty content.");
+            throw new OpenRouterEmptyContentException();
         }
 
         // 4) Parsowanie JSON → FlashcardCollection (prosto, bez kombinacji)
@@ -127,10 +126,10 @@ public class FlashcardService {
             flashcardCollection = objectMapper.readValue(jsonContent, FlashcardCollection.class);
         } catch (Exception e) {
             log.debug("Nieudane parsowanie JSON:\n{}", jsonContent);
-            throw new RuntimeException("Nie udało się zdeserializować odpowiedzi (JSON) z OpenRouter API.", e);
+            throw new OpenRouterResponseParsingException(e);
         }
         if (flashcardCollection.flashcards() == null || flashcardCollection.flashcards().isEmpty()) {
-            throw new IllegalStateException("OpenRouter nie zwrócił żadnych fiszek.");
+            throw new OpenRouterNoFlashcardsException();
         }
 
         // 5) Zapis kolekcji

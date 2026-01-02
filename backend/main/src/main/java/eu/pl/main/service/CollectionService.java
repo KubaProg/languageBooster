@@ -5,15 +5,14 @@ import eu.pl.main.dto.CollectionDetailsDto;
 import eu.pl.main.dto.CollectionResponseDto;
 import eu.pl.main.entity.Card;
 import eu.pl.main.entity.Collection;
+import eu.pl.main.exception.collection.UserCollectionNotFoundException;
 import eu.pl.main.repository.CardRepository;
 import eu.pl.main.repository.CollectionRepository;
+import eu.pl.main.service.mapper.CollectionMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.UUID;
@@ -31,7 +30,7 @@ public class CollectionService {
     public List<CollectionResponseDto> getAllCollectionsForUser(UUID ownerId) {
         log.info("Fetching collections for ownerId: {}", ownerId);
         return collectionRepository.findByOwnerId(ownerId).stream()
-                .map(this::mapToDto)
+                .map(CollectionMapper::mapToDto)
                 .collect(Collectors.toList());
     }
 
@@ -39,16 +38,13 @@ public class CollectionService {
     public CollectionDetailsDto getCollectionDetails(UUID collectionId, UUID ownerId) {
         log.info("Fetching collection details for ID: {} for owner: {}", collectionId, ownerId);
 
-        Collection collection = collectionRepository.findById(collectionId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Collection not found with ID: " + collectionId));
-
-        if (!collection.getOwnerId().equals(ownerId)) {
-            throw new AccessDeniedException("User is not authorized to view this collection.");
-        }
+        Collection collection = collectionRepository.findByIdAndOwnerId(collectionId, ownerId).orElseThrow(
+                () -> new UserCollectionNotFoundException(collectionId, ownerId)
+        );
 
         List<Card> cards = cardRepository.findAllByCollectionIdAndKnownIsFalse(collectionId);
         List<CardDto> cardDtos = cards.stream()
-                .map(this::mapToCardDto)
+                .map(CollectionMapper::mapToCardDto)
                 .collect(Collectors.toList());
 
         return new CollectionDetailsDto(
@@ -65,12 +61,9 @@ public class CollectionService {
     public void deleteCollection(UUID collectionId, UUID ownerId) {
         log.info("Attempting to delete collection with ID: {} for owner: {}", collectionId, ownerId);
 
-        Collection collection = collectionRepository.findById(collectionId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Collection not found with ID: " + collectionId));
-
-        if (!collection.getOwnerId().equals(ownerId)) {
-            throw new AccessDeniedException("User is not authorized to delete this collection.");
-        }
+        collectionRepository.findByIdAndOwnerId(collectionId, ownerId).orElseThrow(
+                () -> new UserCollectionNotFoundException(collectionId, ownerId)
+        );
 
         collectionRepository.deleteById(collectionId);
         log.info("Collection with ID: {} successfully deleted for owner: {}", collectionId, ownerId);
@@ -80,37 +73,13 @@ public class CollectionService {
     public void resetCollection(UUID collectionId, UUID ownerId) {
         log.info("Attempting to reset collection with ID: {} for owner: {}", collectionId, ownerId);
 
-        Collection collection = collectionRepository.findById(collectionId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Collection not found with ID: " + collectionId));
-
-        if (!collection.getOwnerId().equals(ownerId)) {
-            throw new AccessDeniedException("User is not authorized to reset this collection.");
-        }
+        collectionRepository.findByIdAndOwnerId(collectionId, ownerId).orElseThrow(
+                () -> new UserCollectionNotFoundException(collectionId, ownerId)
+        );
 
         cardRepository.resetKnownStatusForCollection(collectionId);
         log.info("Collection with ID: {} successfully reset for owner: {}", collectionId, ownerId);
     }
 
-    private CollectionResponseDto mapToDto(Collection collection) {
-        long cardCount = cardRepository.countByCollectionId(collection.getId());
-        return new CollectionResponseDto(
-                collection.getId(),
-                collection.getName(),
-                collection.getBaseLang(),
-                collection.getTargetLang(),
-                collection.getCreatedAt(),
-                cardCount
-        );
-    }
 
-    private CardDto mapToCardDto(Card card) {
-        return new CardDto(
-                card.getId(),
-                card.getFront(),
-                card.getBack(),
-                card.isKnown(),
-                card.getCreatedAt(),
-                card.getUpdatedAt()
-        );
-    }
 }
