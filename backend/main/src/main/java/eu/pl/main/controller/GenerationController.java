@@ -1,6 +1,7 @@
 package eu.pl.main.controller;
 
 import eu.pl.main.dto.CollectionResponseDto;
+import eu.pl.main.dto.FlashcardRequest;
 import eu.pl.main.service.FlashcardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,23 +21,15 @@ public class GenerationController {
 
     private final FlashcardService flashcardService;
 
-    // Inner class to define the request body structure for this endpoint
-    public record FlashcardRequest(String name, String text, String sourceLang, String targetLang) {}
-
     @PostMapping("/flashcards")
     public ResponseEntity<CollectionResponseDto> generateFlashcards(@RequestBody FlashcardRequest request) {
-        try {
             CollectionResponseDto response = flashcardService.generateFlashCardsCollection(
                     request.name(),
                     request.text(),
                     request.sourceLang(),
-                    request.targetLang()
-            );
+                    request.targetLang());
             return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            // Możesz tu logować lub rzucać dalej do @ControllerAdvice
-            return ResponseEntity.internalServerError().build();
-        }
+
     }
 
     @PostMapping("/flashcards-from-file")
@@ -44,16 +37,12 @@ public class GenerationController {
                                                                             @RequestParam("name") String name,
                                                                             @RequestParam("sourceLang") String sourceLang,
                                                                             @RequestParam("targetLang") String targetLang) {
-        try {
-            CollectionResponseDto response = flashcardService.generateFlashCardsCollectionFromFile(
-                    name,
-                    file,
-                    sourceLang,
-                    targetLang
-            );
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
-        }
+        CollectionResponseDto response = flashcardService.generateFlashCardsCollectionFromFile(
+                name,
+                file,
+                sourceLang,
+                targetLang
+        );
+        return ResponseEntity.ok(response);
     }
 }

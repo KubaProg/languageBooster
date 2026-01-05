@@ -5,6 +5,7 @@ import eu.pl.main.dto.CollectionResponseDto;
 import eu.pl.main.dto.openrouter.*;
 import eu.pl.main.entity.Card;
 import eu.pl.main.entity.Collection;
+import eu.pl.main.exception.card.ProblematicFileException;
 import eu.pl.main.exception.flashcard.*;
 import eu.pl.main.repository.CardRepository;
 import eu.pl.main.repository.CollectionRepository;
@@ -16,6 +17,7 @@ import org.apache.pdfbox.io.RandomAccessReadBuffer;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -44,8 +46,16 @@ public class FlashcardService {
     public CollectionResponseDto generateFlashCardsCollectionFromFile(String name,
                                                                       MultipartFile file,
                                                                       String sourceLang,
-                                                                      String targetLang) throws IOException {
-        String text = extractTextFromFile(file);
+                                                                      String targetLang)  {
+        String text = "";
+
+        try{
+            text = extractTextFromFile(file);
+        }
+        catch(IOException e){
+            throw new ProblematicFileException();
+        }
+
         return generateFlashCardsCollection(name, text, sourceLang, targetLang);
     }
 
@@ -54,7 +64,7 @@ public class FlashcardService {
         if ("pdf".equalsIgnoreCase(fileExtension)) {
             return extractTextFromPdf(file);
         }
-        // Add support for other file types here
+
         throw new UnsupportedFileTypeException(fileExtension);
     }
 
@@ -72,25 +82,23 @@ public class FlashcardService {
         return fileName.substring(fileName.lastIndexOf('.') + 1);
     }
 
-    /**
-     * Wersja prosta/synchroniczna: wywołanie klienta, parsowanie JSON, zapis do DB, zwrot DTO.
-     */
     @Transactional
     public CollectionResponseDto generateFlashCardsCollection(String name,
                                                               String sourceText,
                                                               String sourceLang,
                                                               String targetLang) {
-        // 1) Autoryzacja – must have użytkownik
         UUID userId = authService.getAuthenticatedUserId();
+        FlashcardCollection flashcardCollection = fetchFlashcardsFromAi(sourceText, sourceLang, targetLang);
+        return saveCollectionAndCards(name, sourceLang, targetLang, userId, flashcardCollection);
+    }
 
-        // 2) Prompty + schema
+    private FlashcardCollection fetchFlashcardsFromAi(String sourceText, String sourceLang, String targetLang) {
         String systemPrompt = buildSystemPrompt(sourceLang, targetLang);
-        String userPrompt = sourceText;
         Map<String, Object> schema = buildFlashcardSchema();
 
         List<Message> messages = List.of(
                 new Message("system", systemPrompt),
-                new Message("user", userPrompt)
+                new Message("user", sourceText)
         );
         ResponseFormat responseFormat = buildResponseFormat(schema);
 
@@ -102,12 +110,10 @@ public class FlashcardService {
                 2048
         );
 
-        // 3) Proste synchroniczne wywołanie (bez CompletableFuture)
-        // Jeżeli Twój klient jest reaktywny (Mono), użyj .block(); jeśli jest już synchroniczny, po prostu wywołaj metodę.
         OpenRouterChatResponse response;
         try {
-            response = openRouterClient.sendChatRequest(request)  // jeśli zwraca Mono -> .block()
-                    .block(); // usuń .block() jeżeli klient ma metodę synchroniczną
+            response = openRouterClient.sendChatRequest(request)
+                    .block();
         } catch (Exception e) {
             throw new OpenRouterApiException(e);
         }
@@ -120,19 +126,24 @@ public class FlashcardService {
             throw new OpenRouterEmptyContentException();
         }
 
-        // 4) Parsowanie JSON → FlashcardCollection (prosto, bez kombinacji)
         FlashcardCollection flashcardCollection;
         try {
             flashcardCollection = objectMapper.readValue(jsonContent, FlashcardCollection.class);
         } catch (Exception e) {
-            log.debug("Nieudane parsowanie JSON:\n{}", jsonContent);
+            log.debug("JSON parsing failed:\n{}", jsonContent);
             throw new OpenRouterResponseParsingException(e);
         }
         if (flashcardCollection.flashcards() == null || flashcardCollection.flashcards().isEmpty()) {
             throw new OpenRouterNoFlashcardsException();
         }
+        return flashcardCollection;
+    }
 
-        // 5) Zapis kolekcji
+    private CollectionResponseDto saveCollectionAndCards(String name,
+                                                         String sourceLang,
+                                                         String targetLang,
+                                                         UUID userId,
+                                                         FlashcardCollection flashcardCollection) {
         Collection collection = Collection.builder()
                 .name(name)
                 .baseLang(sourceLang)
@@ -142,7 +153,6 @@ public class FlashcardService {
                 .build();
         Collection savedCollection = collectionRepository.save(collection);
 
-        // 6) Zapis kart (prosta pętla)
         List<Card> cards = new ArrayList<>();
         for (LanguageFlashcard f : flashcardCollection.flashcards()) {
             Card c = Card.builder()
@@ -157,7 +167,6 @@ public class FlashcardService {
         }
         cardRepository.saveAll(cards);
 
-        // 7) Zwrot prostego DTO
         return new CollectionResponseDto(
                 savedCollection.getId(),
                 savedCollection.getName(),
@@ -167,8 +176,6 @@ public class FlashcardService {
                 (long) cards.size()
         );
     }
-
-    // === Pomoce (zostawione prosto, jak było) ===
 
     private String buildSystemPrompt(String sourceLang, String targetLang) {
         return String.format(

@@ -32,6 +32,6 @@ public class OpenRouterClient {
             .bodyValue(request)
             .retrieve()
             .bodyToMono(OpenRouterChatResponse.class)
-            .timeout(Duration.ofSeconds(30)); // Set a reasonable timeout
+            .timeout(Duration.ofSeconds(30));
     }
 }

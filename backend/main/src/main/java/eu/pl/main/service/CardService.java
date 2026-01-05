@@ -1,10 +1,13 @@
 package eu.pl.main.service;
 
 import eu.pl.main.entity.Card;
+import eu.pl.main.exception.auth.UnauthenticatedException;
 import eu.pl.main.exception.card.CardNotFoundException;
+import eu.pl.main.exception.card.UserNotAuthorizedForCardException;
 import eu.pl.main.repository.CardRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
@@ -29,9 +32,8 @@ public class CardService {
         Card card = cardRepository.findById(cardId)
                 .orElseThrow(() -> new CardNotFoundException(cardId));
 
-        // Check if the owner of the card's collection matches the authenticated user
         if (!card.getCollection().getOwnerId().equals(ownerId)) {
-            throw new AccessDeniedException("User is not authorized to update this card.");
+            throw new UserNotAuthorizedForCardException(cardId,ownerId);
         }
 
         card.setKnown(known);
@@ -48,7 +50,7 @@ public class CardService {
                 .orElseThrow(() -> new CardNotFoundException(cardId));
 
         if (!card.getCollection().getOwnerId().equals(ownerId)) {
-            throw new AccessDeniedException("User is not authorized to update this card.");
+            throw new UserNotAuthorizedForCardException(cardId,ownerId);
         }
 
         card.setFront(front);
@@ -66,7 +68,7 @@ public class CardService {
                 .orElseThrow(() -> new CardNotFoundException(cardId));
 
         if (!card.getCollection().getOwnerId().equals(ownerId)) {
-            throw new AccessDeniedException("User is not authorized to delete this card.");
+            throw new UserNotAuthorizedForCardException(cardId,ownerId);
         }
 
         cardRepository.delete(card);
