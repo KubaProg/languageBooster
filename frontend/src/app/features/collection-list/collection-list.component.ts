@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CollectionService } from '../collection/services/collection.service';
 import { CollectionResponseDto } from '../../types/aliases';
 import { CommonModule } from '@angular/common';
 import { CollectionCardComponent } from '../collection-card/collection-card.component';
 import { ConfirmationModalComponent } from '../../shared/components/confirmation-modal/confirmation-modal.component';
+import {CollectionService} from "../../services/collection.service";
+
 
 @Component({
   selector: 'app-collection-list',

@@ -7,9 +7,9 @@ import {finalize, Observable} from 'rxjs';
 import { LanguageSelectorComponent } from '../../shared/components/language-selector/language-selector.component';
 import { SourceInputComponent } from '../../shared/components/source-input/source-input.component';
 import { languageMatchValidator } from './validators/custom-validators';
-import { CollectionService } from '../collection/services/collection.service';
-import { NotificationService } from '../../shared/services/notification.service';
 import { FlashcardRequest } from '../../types/aliases';
+import {CollectionService} from "../../services/collection.service";
+import {NotificationService} from "../../services/notification.service";
 
 @Component({
   selector: 'app-generation-form',
