@@ -1,17 +1,56 @@
-# IntelliJ
-.idea/
-*.iml
+####################################
+# Terraform
+####################################
 
-# Node / Angular
+# Local .terraform directories
+**/.terraform/*
+
+# Terraform state files
+**/*.tfstate
+**/*.tfstate.*
+
+# Terraform crash logs
+crash.log
+crash.*.log
+
+# Terraform override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Terraform CLI configuration
+.terraformrc
+terraform.rc
+
+####################################
+# Sensitive variable files
+####################################
+
+*.tfvars
+*.tfvars.json
+
+####################################
+# OS / IDE junk
+####################################
+
+.DS_Store
+Thumbs.db
+
+.idea/
+.vscode/
+
+####################################
+# Node / Angular (if monorepo)
+####################################
+
 node_modules/
 dist/
+.angular/
 
-# Maven / Java
+####################################
+# Java / Spring Boot
+####################################
+
 target/
-
-# Misc
-.DS_Store
-
-#infra
-infrastructure/.terraform
-@infrastructure/.terraform
+*.log
