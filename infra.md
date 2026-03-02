@@ -281,3 +281,14 @@ flowchart TB
 ### 11.3. ImagePullBackOff
 - sprawdź rolę node group (ECR read),
 - `kubectl describe pod <pod>`.
+
+---
+
+
+## 12. Rozwój (Roadmap)
+
+### 12.1. Refaktoring do Helm
+W celach biznesowych i produkcyjnych, po zweryfikowaniu działania manifestów YAML, planujemy:
+1. Przeniesienie konfiguracji do **Helm Chart**.
+2. Użycie `values.yaml` do zarządzania zmiennymi środowiskowymi i tagami obrazów.
+3. Wersjonowanie wdrożeń (Releases).

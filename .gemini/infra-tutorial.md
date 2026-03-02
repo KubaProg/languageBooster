@@ -43,3 +43,11 @@ This tutorial explains how to run and destroy the Terraform infrastructure for t
     terraform destroy
     ```
     You will be prompted to confirm the destruction. Type `yes` to proceed.
+
+## Future Improvements
+
+### 3. Helm Refactoring
+After verifying the deployment with standard YAML manifests, the next logical step is to refactor the Kubernetes configuration into a **Helm Chart**. This will allow for:
+- Better template management.
+- Environment-specific values (dev/staging/prod).
+- Easier rollbacks and deployment versioning.
