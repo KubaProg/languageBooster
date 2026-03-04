@@ -26,11 +26,14 @@ Once the cluster is live, we need to install the logic that talks to AWS.
 
 ## 3. The Road to Deployment
 
-1.  **Build & Push:** Containerize the Spring Boot and Angular apps and push them to our new ECR repos.
-2.  **K8s Manifests:** Prepare `deployment.yaml`, `service.yaml`, and `ingress.yaml`.
+1.  **Build & Push (Universal Image Strategy):** Containerize apps.
+    - **Backend:** Standard Spring Boot JAR.
+    - **Frontend:** Built with a relative `/api` path. This makes the image portable across all environments without needing build-time secrets.
+2.  **K8s Manifests & Ingress Routing:** Prepare `deployment.yaml`, `service.yaml`, and `ingress.yaml`.
+    - **Routing:** Configure AWS Load Balancer (ALB) to route `/api/*` to the backend service and all other traffic to the frontend service.
 3.  **Final Test:** Open the ALB DNS and see the app running.
 
 ---
 
-## 💡 Learning Tip: The "Identity Bridge"
-We have now coded the **OIDC Provider**. This is a big milestone! It means your cluster is no longer just a group of servers; it's an "Identity-Aware" system that can securely ask AWS for permissions without needing hardcoded passwords or keys.
+## 💡 Learning Tip: The "Universal Image"
+We are building the frontend with a **relative API path (`/api`)**. This means the same Docker image can be used in staging, production, or even locally. We don't "bake in" the server address; instead, we let the **Infrastructure (ALB/Ingress)** handle the routing between the two services.

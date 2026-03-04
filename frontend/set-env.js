@@ -6,9 +6,7 @@ const path = require('path');
 const envProdFile = `
 export const environment = {
   production: true,
-  apiUrl: '${process.env.NG_APP_API_URL || 'https://language-booster-backend.fly.dev'}',
-  supabaseUrl: '${process.env.NG_APP_SUPABASE_URL || ''}',
-  supabaseKey: '${process.env.NG_APP_SUPABASE_KEY || ''}',
+  apiUrl: '${process.env.NG_APP_API_URL || '/api'}',
 };
 `;
 
@@ -28,8 +26,6 @@ const envDevFile = `
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:8080', // Default for local development
-  supabaseUrl: '${process.env.NG_APP_SUPABASE_URL || ''}', // Can be overridden by local .env or build system
-  supabaseKey: '${process.env.NG_APP_SUPABASE_KEY || ''}', // Can be overridden by local .env or build system
 };
 `;
 
