@@ -31,6 +31,8 @@
     "@angular/platform-server": "^20.3.17",
     "@angular/router": "^20.3.17",
     "@angular/ssr": "^20.3.19",
+    "@primeuix/styles": "^2.0.3",
+    "@primeuix/themes": "^2.0.3",
     "@supabase/supabase-js": "^2.75.0",
     "dotenv": "^17.2.3",
     "express": "^4.18.2",

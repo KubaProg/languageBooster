@@ -5,6 +5,8 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { provideHttpClient } from "@angular/common/http";
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { MessageService, ConfirmationService } from 'primeng/api';
+import { providePrimeNG } from 'primeng/config';
+import Aura from '@primeuix/themes/aura';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -13,6 +15,11 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     { provide: LocationStrategy, useClass: HashLocationStrategy },
     MessageService,
-    ConfirmationService
+    ConfirmationService,
+    providePrimeNG({
+      theme: {
+        preset: Aura
+      }
+    })
   ]
 };
