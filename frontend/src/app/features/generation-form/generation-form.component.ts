@@ -12,15 +12,14 @@ import {CollectionService} from "../../services/collection.service";
 import {NotificationService} from "../../services/notification.service";
 
 @Component({
-  selector: 'app-generation-form',
-  standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    LanguageSelectorComponent,
-    SourceInputComponent
-  ],
-  templateUrl: './generation-form.component.html',
-  styleUrls: ['./generation-form.component.scss']
+    selector: 'app-generation-form',
+    imports: [
+        ReactiveFormsModule,
+        LanguageSelectorComponent,
+        SourceInputComponent
+    ],
+    templateUrl: './generation-form.component.html',
+    styleUrls: ['./generation-form.component.scss']
 })
 export class GenerationFormComponent {
   private fb = inject(FormBuilder);

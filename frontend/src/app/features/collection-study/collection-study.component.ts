@@ -9,11 +9,10 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-collection-study',
-  standalone: true,
-  imports: [CommonModule, HttpClientModule, FormsModule, RouterLink],
-  templateUrl: './collection-study.component.html',
-  styleUrl: './collection-study.component.scss'
+    selector: 'app-collection-study',
+    imports: [CommonModule, HttpClientModule, FormsModule, RouterLink],
+    templateUrl: './collection-study.component.html',
+    styleUrl: './collection-study.component.scss'
 })
 export class CollectionStudyComponent implements OnInit {
   private route = inject(ActivatedRoute);

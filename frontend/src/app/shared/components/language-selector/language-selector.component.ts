@@ -7,18 +7,17 @@ export interface Language {
 }
 
 @Component({
-  selector: 'app-language-selector',
-  standalone: true,
-  imports: [ReactiveFormsModule],
-  templateUrl: './language-selector.component.html',
-  styleUrls: ['./language-selector.component.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => LanguageSelectorComponent),
-      multi: true
-    }
-  ]
+    selector: 'app-language-selector',
+    imports: [ReactiveFormsModule],
+    templateUrl: './language-selector.component.html',
+    styleUrls: ['./language-selector.component.scss'],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => LanguageSelectorComponent),
+            multi: true
+        }
+    ]
 })
 export class LanguageSelectorComponent implements ControlValueAccessor {
   public supportedLanguages = signal<Language[]>([

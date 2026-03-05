@@ -8,11 +8,10 @@ import {CollectionService} from "../../services/collection.service";
 
 
 @Component({
-  selector: 'app-collection-list',
-  standalone: true,
-  imports: [CommonModule, CollectionCardComponent, ConfirmationModalComponent],
-  templateUrl: './collection-list.component.html',
-  styleUrl: './collection-list.component.scss'
+    selector: 'app-collection-list',
+    imports: [CommonModule, CollectionCardComponent, ConfirmationModalComponent],
+    templateUrl: './collection-list.component.html',
+    styleUrl: './collection-list.component.scss'
 })
 export class CollectionListComponent implements OnInit {
   collections: CollectionResponseDto[] = [];

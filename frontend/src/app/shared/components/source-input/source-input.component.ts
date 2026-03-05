@@ -5,18 +5,17 @@ import { NgClass } from '@angular/common';
 export type SourceType = 'text' | 'file';
 
 @Component({
-  selector: 'app-source-input',
-  standalone: true,
-  imports: [NgClass],
-  templateUrl: './source-input.component.html',
-  styleUrls: ['./source-input.component.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => SourceInputComponent),
-      multi: true
-    }
-  ]
+    selector: 'app-source-input',
+    imports: [NgClass],
+    templateUrl: './source-input.component.html',
+    styleUrls: ['./source-input.component.scss'],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => SourceInputComponent),
+            multi: true
+        }
+    ]
 })
 export class SourceInputComponent implements ControlValueAccessor {
   public activeTab = signal<SourceType>('text');
